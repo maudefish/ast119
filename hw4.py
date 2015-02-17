@@ -91,7 +91,7 @@ def hw4(dt_start = "2010-01-01", dt_end = "2011-01-01"):
   str(perc75))
   
   # Plot Data  
-  figure()
+  figure(1)
   # Draw grey bar
   fill_between(range(len(deltaQo2)), perc25, perc75, facecolor='grey')
   # Label
@@ -102,6 +102,35 @@ def hw4(dt_start = "2010-01-01", dt_end = "2011-01-01"):
   # Plot Data
   plot(range(len(deltaQo2)), deltaQo2)
 
-  # TODO: Part 8
+  #create a new figure window
+  figure(2)
+
+  #the amount of elements that 'percentile' handles is [0,100]
+  p = arange(101)
+
+  #make the cumulative plot first so that we can just reuse the axes 
+  #with the y-peak cut to 1.00
+  plot(percentile(deltaQo2,p), 0.01*p, '-k', lw=2.)
+  draw()
+  
+  #now we make the histogram
+  hist1, edges1 = histogram(deltaQo2)
+
+  #the first output for the histogram tuple is an array of integers,
+  #so to scale the values down, we create an array with corresponding
+  #float elements and then divide by the greatest valued element
+  hist1=hist1.astype(float)
+  hist1=hist1[:]/max(hist1)
+
+  #plot the histogram with the 'bar' function
+  bar(edges1[:-1], hist1, width=edges1[1:]-edges1[:-1])
+
+  #title and label accordingly
+  hst_title= str(datetime.strptime(dt_start, '%Y-%m-%d')) + ' to ' + str(datetime.strptime(dt_end, '%Y-%m-%d'))
+  xlabel('Delta Q(O2)')
+  ylabel('Relative Frequency')
+  title(hst_title)
+  draw()
+
   
   
